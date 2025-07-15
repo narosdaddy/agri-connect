@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "677843548509",
+    "project_id": "agri-connecte",
+    "storage_bucket": "agri-connecte.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:677843548509:android:78d992f67f57100b5390b4",
+        "android_client_info": {
+          "package_name": "com.example.agri_marketplace"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCid6ufLluq4hWd9xDvyWWGHARlgVd0Vu8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
