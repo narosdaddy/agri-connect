@@ -2,36 +2,43 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 // Services
-import 'services/auth_service.dart';
-import 'services/cart_service.dart';
-import 'services/product_service.dart';
-import 'services/order_service.dart';
+import 'package:agri_marketplace/data/sources/auth_service.dart';
+import 'package:agri_marketplace/data/sources/cart_service.dart';
+import 'package:agri_marketplace/data/sources/product_service.dart';
+import 'package:agri_marketplace/data/sources/order_service.dart';
+import 'package:agri_marketplace/data/sources/profile_service.dart';
+import 'package:dio/dio.dart';
+// Ajout de l'import du provider
+import 'package:agri_marketplace/presentation/features/auth/provider/auth_provider.dart';
+import 'package:agri_marketplace/presentation/features/home/provider/profile_provider.dart';
 
 // Routes
-import 'routes.dart';
+import 'package:agri_marketplace/presentation/routes/routes.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:agri_marketplace/core/network/firebase_options.dart';
 
-void main() {
-  runApp(const AgriConnectApp());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  final dio = Dio(BaseOptions(baseUrl: 'http://localhost:8080/api/v1'));
+  runApp(AgriConnectApp(dio: dio));
 }
 
 class AgriConnectApp extends StatelessWidget {
-  const AgriConnectApp({super.key});
+  final Dio dio;
+  const AgriConnectApp({super.key, required this.dio});
 
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
+        ChangeNotifierProvider(create: (_) => AuthProvider(AuthService(dio))),
         ChangeNotifierProvider(
-          create: (_) {
-            final authService = AuthService();
-            // Initialiser les utilisateurs de test en mode développement
-            // Appels à authService.initialize() et authService.createTestUsers() supprimés
-            return authService;
-          },
+          create: (_) => ProfileProvider(ProfileService(dio)),
         ),
-        ChangeNotifierProvider(create: (_) => CartService()..loadCart()),
-        ChangeNotifierProvider(create: (_) => ProductService()..initializeProducts()),
-        ChangeNotifierProvider(create: (_) => OrderService()),
+        Provider(create: (_) => CartService(dio)),
+        Provider(create: (_) => ProductService(dio)),
+        Provider(create: (_) => OrderService(dio)),
       ],
       child: MaterialApp(
         title: 'AgriConnect Marketplace',
