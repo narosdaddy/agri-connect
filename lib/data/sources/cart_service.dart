@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import '../../core/config/api_config.dart';
 import '../models/cart_model.dart';
 import '../../domain/entities/cart.dart';
 
@@ -11,13 +12,13 @@ class CartService {
   List<CartElement> get cartItems => _cart?.elements ?? [];
 
   Future<void> fetchCart() async {
-    final response = await dio.get('/cart');
+    final response = await dio.get(ApiConfig.cart);
     _cart = CartModel.fromJson(response.data);
   }
 
   Future<CartModel> addToCart(String produitId, int quantite) async {
     final response = await dio.post(
-      '/cart/add',
+      ApiConfig.cartItems,
       data: {'produitId': produitId, 'quantite': quantite},
     );
     _cart = CartModel.fromJson(response.data);
@@ -25,20 +26,20 @@ class CartService {
   }
 
   Future<CartModel> removeFromCart(String produitId) async {
-    final response = await dio.delete('/cart/remove/$produitId');
+    final response = await dio.delete(ApiConfig.cartItemById.replaceFirst('{id}', produitId));
     _cart = CartModel.fromJson(response.data);
     return _cart!;
   }
 
   Future<void> clearCart() async {
-    await dio.post('/cart/clear');
+    await dio.delete(ApiConfig.cart);
     _cart = null;
   }
 
   Future<void> updateQuantity(String produitId, int quantite) async {
     final response = await dio.put(
-      '/cart/update',
-      data: {'produitId': produitId, 'quantite': quantite},
+      ApiConfig.cartItemById.replaceFirst('{id}', produitId),
+      data: {'quantite': quantite},
     );
     _cart = CartModel.fromJson(response.data);
   }

@@ -1,5 +1,5 @@
 import 'package:dio/dio.dart';
-// import '../../core/config/api_config.dart';
+import '../../core/config/api_config.dart';
 import '../models/product_model.dart';
 
 class ProductService {
@@ -10,7 +10,7 @@ class ProductService {
   List<ProductModel> get products => _products;
 
   Future<void> fetchProducts() async {
-    final response = await dio.get('/produits');
+    final response = await dio.get(ApiConfig.products);
     _products =
         (response.data as List)
             .map((json) => ProductModel.fromJson(json))
@@ -18,13 +18,13 @@ class ProductService {
   }
 
   Future<ProductModel> getProductById(String id) async {
-    final response = await dio.get('/produits/$id');
+    final response = await dio.get(ApiConfig.productById.replaceFirst('{id}', id));
     return ProductModel.fromJson(response.data);
   }
 
   Future<List<ProductModel>> searchProducts(String query) async {
     final response = await dio.get(
-      '/produits/search',
+      ApiConfig.searchProducts,
       queryParameters: {'q': query},
     );
     return (response.data as List)
@@ -33,21 +33,21 @@ class ProductService {
   }
 
   Future<ProductModel> addProduct(ProductModel product) async {
-    final response = await dio.post('/produits', data: product.toJson());
+    final response = await dio.post(ApiConfig.products, data: product.toJson());
     final newProduct = ProductModel.fromJson(response.data);
     _products.add(newProduct);
     return newProduct;
   }
 
   Future<ProductModel> updateProduct(String id, ProductModel product) async {
-    final response = await dio.put('/produits/$id', data: product.toJson());
+    final response = await dio.put(ApiConfig.productById.replaceFirst('{id}', id), data: product.toJson());
     final updated = ProductModel.fromJson(response.data);
     _products = _products.map((p) => p.id == id ? updated : p).toList();
     return updated;
   }
 
   Future<void> deleteProduct(String id) async {
-    await dio.delete('/produits/$id');
+    await dio.delete(ApiConfig.productById.replaceFirst('{id}', id));
     _products.removeWhere((p) => p.id == id);
   }
 
