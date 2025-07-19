@@ -1,3 +1,5 @@
+import 'package:file_picker/file_picker.dart';
+
 /// Modèle de réponse d'authentification
 class AuthResponse {
   final String? id; // ID de l'utilisateur
@@ -152,10 +154,10 @@ class EvolutionProducteurRequest {
   final String descriptionExploitation; // Description de l'exploitation
   final String adresseExploitation; // Adresse de l'exploitation
   final String telephoneExploitation; // Téléphone de l'exploitation
-  final dynamic identityFile;
-  final dynamic addressFile;
-  final dynamic bioFile;
-  final List<dynamic> otherFiles;
+  final PlatformFile? identityFile;
+  final PlatformFile? addressFile;
+  final PlatformFile? bioFile;
+  final List<PlatformFile> otherFiles;
 
   EvolutionProducteurRequest({
     required this.nomExploitation,

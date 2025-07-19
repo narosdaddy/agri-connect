@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:dio/dio.dart';
+import 'package:file_picker/file_picker.dart';
 import '../../core/config/api_config.dart';
 import '../models/profile_model.dart';
 import '../models/user_model.dart';
@@ -33,35 +34,35 @@ class ProfileService {
     final formData = FormData.fromMap(request);
 
     if (request['identityFile'] != null) {
-      final file = request['identityFile'] as File;
+      final file = request['identityFile'] as PlatformFile;
       formData.files.add(MapEntry(
         'identityFile',
-        await MultipartFile.fromFile(file.path),
+        MultipartFile.fromBytes(file.bytes!, filename: file.name),
       ));
     }
 
     if (request['addressFile'] != null) {
-      final file = request['addressFile'] as File;
+      final file = request['addressFile'] as PlatformFile;
       formData.files.add(MapEntry(
         'addressFile',
-        await MultipartFile.fromFile(file.path),
+        MultipartFile.fromBytes(file.bytes!, filename: file.name),
       ));
     }
 
     if (request['bioFile'] != null) {
-      final file = request['bioFile'] as File;
+      final file = request['bioFile'] as PlatformFile;
       formData.files.add(MapEntry(
         'bioFile',
-        await MultipartFile.fromFile(file.path),
+        MultipartFile.fromBytes(file.bytes!, filename: file.name),
       ));
     }
 
     if (request['otherFiles'] != null) {
-      final files = request['otherFiles'] as List<File>;
+      final files = request['otherFiles'] as List<PlatformFile>;
       for (var file in files) {
         formData.files.add(MapEntry(
           'otherFiles',
-          await MultipartFile.fromFile(file.path),
+          MultipartFile.fromBytes(file.bytes!, filename: file.name),
         ));
       }
     }

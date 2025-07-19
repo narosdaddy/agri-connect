@@ -22,10 +22,10 @@ class _ProducteurRequestScreenState extends State<ProducteurRequestScreen> {
   final _phoneController = TextEditingController();
 
   // Pièces jointes
-  File? _identityFile;
-  File? _addressFile;
-  File? _bioFile;
-  List<File> _otherFiles = [];
+  PlatformFile? _identityFile;
+  PlatformFile? _addressFile;
+  PlatformFile? _bioFile;
+  List<PlatformFile> _otherFiles = [];
 
   bool _isSubmitting = false;
 
@@ -266,21 +266,21 @@ class _ProducteurRequestScreenState extends State<ProducteurRequestScreen> {
     );
   }
 
-  Future<void> _pickFile(Function(File?) onPicked) async {
+  Future<void> _pickFile(Function(PlatformFile?) onPicked) async {
     FilePickerResult? result = await FilePicker.platform.pickFiles(
       type: FileType.custom,
       allowedExtensions: ['pdf', 'jpg', 'png'],
     );
 
     if (result != null) {
-      onPicked(File(result.files.single.path!));
+      onPicked(result.files.single);
     }
   }
 
   Widget _buildFilePicker(
     String label,
-    File? file,
-    Function(File?) onPicked, {
+    PlatformFile? file,
+    Function(PlatformFile?) onPicked, {
     bool required = false,
   }) {
     return Column(
@@ -310,7 +310,7 @@ class _ProducteurRequestScreenState extends State<ProducteurRequestScreen> {
             SizedBox(width: 12),
             Expanded(
               child: Text(
-                file?.path.split('/').last ?? 'Aucun fichier choisi',
+                file?.name ?? 'Aucun fichier choisi',
                 style: GoogleFonts.montserrat(
                   fontSize: 14,
                   color: file == null ? Colors.grey : Colors.black87,
