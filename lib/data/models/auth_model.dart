@@ -152,12 +152,20 @@ class EvolutionProducteurRequest {
   final String descriptionExploitation; // Description de l'exploitation
   final String adresseExploitation; // Adresse de l'exploitation
   final String telephoneExploitation; // Téléphone de l'exploitation
+  final dynamic identityFile;
+  final dynamic addressFile;
+  final dynamic bioFile;
+  final List<dynamic> otherFiles;
 
   EvolutionProducteurRequest({
     required this.nomExploitation,
     required this.descriptionExploitation,
     required this.adresseExploitation,
     required this.telephoneExploitation,
+    this.identityFile,
+    this.addressFile,
+    this.bioFile,
+    this.otherFiles = const [],
   });
 
   factory EvolutionProducteurRequest.fromJson(Map<String, dynamic> json) =>
@@ -173,5 +181,9 @@ class EvolutionProducteurRequest {
         'descriptionExploitation': descriptionExploitation,
         'adresseExploitation': adresseExploitation,
         'telephoneExploitation': telephoneExploitation,
+        'identityFile': identityFile,
+        'addressFile': addressFile,
+        'bioFile': bioFile,
+        'otherFiles': otherFiles,
       };
 }
