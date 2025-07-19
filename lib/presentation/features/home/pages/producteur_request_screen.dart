@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:agri_marketplace/presentation/features/home/provider/profile_provider.dart';
+import 'dart:io';
+import 'package:file_picker/file_picker.dart';
 import 'package:agri_marketplace/presentation/features/auth/provider/auth_provider.dart';
 import 'package:agri_marketplace/data/models/auth_model.dart';
 
@@ -19,11 +21,11 @@ class _ProducteurRequestScreenState extends State<ProducteurRequestScreen> {
   final _addressController = TextEditingController();
   final _phoneController = TextEditingController();
 
-  // Pièces jointes (simulées)
-  String? _identityFile;
-  String? _addressFile;
-  String? _bioFile;
-  List<String> _otherFiles = [];
+  // Pièces jointes
+  File? _identityFile;
+  File? _addressFile;
+  File? _bioFile;
+  List<File> _otherFiles = [];
 
   bool _isSubmitting = false;
 
@@ -44,6 +46,10 @@ class _ProducteurRequestScreenState extends State<ProducteurRequestScreen> {
       descriptionExploitation: _descController.text,
       adresseExploitation: _addressController.text,
       telephoneExploitation: _phoneController.text,
+      identityFile: _identityFile,
+      addressFile: _addressFile,
+      bioFile: _bioFile,
+      otherFiles: _otherFiles,
     );
     final success = await profileProvider.demandeEvolutionProducteur(request);
     setState(() => _isSubmitting = false);
@@ -241,8 +247,8 @@ class _ProducteurRequestScreenState extends State<ProducteurRequestScreen> {
                 SizedBox(height: 12),
                 _buildFilePicker(
                   'Autres documents (optionnel, multiple)',
-                  _otherFiles.isNotEmpty ? _otherFiles.join(', ') : null,
-                  (f) => setState(() => _otherFiles = f != null ? [f] : []),
+                  null,
+                  (f) => setState(() => _otherFiles.add(f!)),
                 ),
                 SizedBox(height: 8),
                 Text(
@@ -260,10 +266,21 @@ class _ProducteurRequestScreenState extends State<ProducteurRequestScreen> {
     );
   }
 
+  Future<void> _pickFile(Function(File?) onPicked) async {
+    FilePickerResult? result = await FilePicker.platform.pickFiles(
+      type: FileType.custom,
+      allowedExtensions: ['pdf', 'jpg', 'png'],
+    );
+
+    if (result != null) {
+      onPicked(File(result.files.single.path!));
+    }
+  }
+
   Widget _buildFilePicker(
     String label,
-    String? file,
-    Function(String?) onPicked, {
+    File? file,
+    Function(File?) onPicked, {
     bool required = false,
   }) {
     return Column(
@@ -279,10 +296,7 @@ class _ProducteurRequestScreenState extends State<ProducteurRequestScreen> {
         Row(
           children: [
             ElevatedButton(
-              onPressed: () {
-                // Simule la sélection d'un fichier
-                onPicked('Fichier_${label.replaceAll(' ', '_')}');
-              },
+              onPressed: () => _pickFile(onPicked),
               child: Text(file == null ? 'Choisir un fichier' : 'Modifier'),
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.white,
@@ -296,7 +310,7 @@ class _ProducteurRequestScreenState extends State<ProducteurRequestScreen> {
             SizedBox(width: 12),
             Expanded(
               child: Text(
-                file ?? 'Aucun fichier choisi',
+                file?.path.split('/').last ?? 'Aucun fichier choisi',
                 style: GoogleFonts.montserrat(
                   fontSize: 14,
                   color: file == null ? Colors.grey : Colors.black87,

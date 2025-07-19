@@ -45,4 +45,28 @@ class ApiConfig {
       '/partenaires-logistiques/{id}';
 
   // Ajoute ici les autres endpoints (produits, commandes, paiement, admin, etc.)
+
+  // Products
+  static const String products = '/products';
+  static const String productById = '/products/{id}';
+  static const String productCategories = '/products/categories';
+  static const String searchProducts = '/products/search';
+  static const String featuredProducts = '/products/featured';
+
+  // Cart
+  static const String cart = '/cart';
+  static const String cartItems = '/cart/items';
+  static const String cartItemById = '/cart/items/{id}';
+  static const String applyPromo = '/cart/apply-promo';
+
+  // Orders
+  static const String orders = '/orders';
+  static const String orderById = '/orders/{id}';
+  static const String orderStatus = '/orders/{id}/status';
+  static const String orderAnalytics = '/orders/analytics';
+
+  // Users
+  static const String producers = '/users/producers';
+  static const String producerById = '/users/producers/{id}';
+  static const String usersMe = '/users/me';
 }

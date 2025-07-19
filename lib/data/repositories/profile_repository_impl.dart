@@ -16,7 +16,6 @@ class ProfileRepositoryImpl implements ProfileRepository {
 
   @override
   Future<void> demandeEvolutionProducteur(Map<String, dynamic> request) async {
-    // TODO: implement API call for demandeEvolutionProducteur
-    throw UnimplementedError();
+    await service.demandeEvolutionProducteur(request);
   }
 }
