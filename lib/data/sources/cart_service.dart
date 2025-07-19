@@ -50,8 +50,8 @@ class CartService {
 
   double get subtotal => cartItems.fold(
     0,
-    (sum, e) => sum + (e.quantite * 0),
-  ); // À adapter selon modèle produit
-  double get shipping => 0; // À adapter selon logique métier
+    (sum, e) => sum + (e.quantite * e.prix),
+  );
+  double get shipping => 5.0;
   double get total => subtotal + shipping;
 }
