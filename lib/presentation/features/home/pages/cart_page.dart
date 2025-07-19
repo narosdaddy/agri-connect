@@ -160,7 +160,7 @@ class _CartPageState extends State<CartPage> with TickerProviderStateMixin {
             TextButton(
               onPressed: () {
                 Navigator.of(context).pop();
-                // Navigation vers les commandes
+                Navigator.of(context).pushNamed('/orders');
               },
               child: const Text('Voir mes commandes'),
             ),
@@ -246,7 +246,7 @@ class _CartPageState extends State<CartPage> with TickerProviderStateMixin {
           const SizedBox(height: 32),
           ElevatedButton.icon(
             onPressed: () {
-              // Navigation vers les produits
+              Navigator.of(context).pushNamed('/home');
             },
             icon: const Icon(Icons.shopping_bag),
             label: const Text('Découvrir les produits'),
@@ -321,18 +321,11 @@ class _CartPageState extends State<CartPage> with TickerProviderStateMixin {
   }
 
   Widget _buildCartItem(CartElement item, CartService cartService) {
-    final productService = Provider.of<ProductService>(context, listen: false);
-    final ProductModel? product = productService.products
-        .where((p) => p.id == item.produitId)
-        .cast<ProductModel?>()
-        .firstWhere((p) => p != null, orElse: () => null);
-    final name = product?.nom ?? item.produitId;
-    final price = product?.prix ?? 0.0;
-    final quantity = item.quantite;
-    final total = price * quantity;
+    final total = item.prix * item.quantite;
     return ListTile(
-      title: Text(name),
-      subtitle: Text('Quantité: $quantity'),
+      leading: Image.network(item.image, width: 50, height: 50, fit: BoxFit.cover),
+      title: Text(item.nom),
+      subtitle: Text('Quantité: ${item.quantite}'),
       trailing: Text('${total.toStringAsFixed(2)} €'),
     );
   }

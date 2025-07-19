@@ -16,6 +16,9 @@ class CartModel extends Cart {
               (e) => CartElement(
                 produitId: e['produitId'] as String,
                 quantite: e['quantite'] as int,
+                nom: e['nom'] as String,
+                prix: e['prix'] as double,
+                image: e['image'] as String,
               ),
             )
             .toList(),
@@ -26,7 +29,13 @@ class CartModel extends Cart {
     'acheteurId': acheteurId,
     'elements':
         elements
-            .map((e) => {'produitId': e.produitId, 'quantite': e.quantite})
+            .map((e) => {
+                  'produitId': e.produitId,
+                  'quantite': e.quantite,
+                  'nom': e.nom,
+                  'prix': e.prix,
+                  'image': e.image,
+                })
             .toList(),
   };
 }

@@ -13,6 +13,15 @@ class Cart {
 class CartElement {
   final String produitId;
   final int quantite;
+  final String nom;
+  final double prix;
+  final String image;
 
-  const CartElement({required this.produitId, required this.quantite});
+  const CartElement({
+    required this.produitId,
+    required this.quantite,
+    required this.nom,
+    required this.prix,
+    required this.image,
+  });
 }
