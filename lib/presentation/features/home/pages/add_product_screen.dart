@@ -131,9 +131,13 @@ class _AddProductScreenState extends State<AddProductScreen>
 
       Navigator.pop(context);
     } catch (e) {
+      String errorMessage = 'Erreur lors de l\'ajout du produit';
+      if (e.toString().contains('Producteur non trouvé')) {
+        errorMessage = 'Producteur non trouvé. Veuillez vérifier que votre compte est bien un compte producteur.';
+      }
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text('Erreur lors de l\'ajout: $e'),
+          content: Text(errorMessage),
           backgroundColor: Colors.red,
         ),
       );
