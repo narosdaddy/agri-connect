@@ -33,7 +33,11 @@ class ProductService {
   }
 
   Future<ProductModel> addProduct(ProductModel product) async {
-    final response = await dio.post(ApiConfig.products, data: product.toJson());
+    final response = await dio.post(
+      ApiConfig.products,
+      data: product.toJson(),
+      queryParameters: {'producteurId': product.producteurId},
+    );
     final newProduct = ProductModel.fromJson(response.data);
     _products.add(newProduct);
     return newProduct;
