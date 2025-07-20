@@ -50,7 +50,7 @@ class ProductModel extends Product {
     'description': description,
     'prix': prix,
     'categorieId': categorieId,
-    'quantite': quantite,
+    'quantiteDisponible': quantite,
     'producteurId': producteurId,
     'imageUrl': imageUrl,
     'bio': bio,
